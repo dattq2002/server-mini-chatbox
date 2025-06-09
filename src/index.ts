@@ -1,10 +1,26 @@
 import express from 'express'
 import cors from 'cors'
+import http from 'http'
+import { Server } from 'socket.io' // ✅ Import Socket.IO server
 import databaseService from '~/database/config.database'
 import { defaultErrorHandler } from '~/middlewares/error.middleware'
-//add cors
+import authRouter from '~/routes/auth.route'
+import { setupSocket } from '~/sockets/chat.socket'
+import userRouter from '~/routes/user.route'
+
 const app = express()
+const server = http.createServer(app) // ✅ Tạo HTTP server riêng để dùng cho Socket.IO
+const io = new Server(server, {
+  cors: {
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+  }
+})
+
 const port = 4000
+
+// Middlewares
 app.use(
   express.json(),
   cors({
@@ -14,17 +30,21 @@ app.use(
   })
 )
 
+// DB
 databaseService.connect()
-app.get('/api', (req, res) => {
+
+// Routes
+app.get('/', (req, res) => {
   res.json({ message: 'Welcome to Server Chatbox !' })
 })
-// app.use('/api/auth', authRouter)
-// app.use('/api/user', userRouter)
-// app.use('/api/product', productRouter)
-// app.use('/api/category', categoryRouter)
-// app.use('/api/order', orderRouter)
-// app.post('/callback', zaloPaymentCallback)
+app.use('/api/auth', authRouter)
+app.use('/api/user', userRouter)
 app.use(defaultErrorHandler)
-app.listen(port, () => {
-  console.log(`Server này đang chạy trên post ${port}`)
+
+// ✅ Khởi tạo socket
+setupSocket(io)
+
+// ✅ Khởi động server qua `server.listen`
+server.listen(port, () => {
+  console.log(`🚀 Server đang chạy trên port ${port}`)
 })

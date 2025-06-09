@@ -1,6 +1,8 @@
 import { Collection, Db, MongoClient } from 'mongodb'
+import { Message } from '~/models/schemas/message.schema'
+import { RefreshToken } from '~/models/schemas/refreshToken.schema'
+import { User } from '~/models/schemas/user.schema'
 // import RefreshToken from '~/models/schemas/refreshToken.schema'
-// import User from '~/models/schemas/user.schema'
 
 const uri = `mongodb+srv://dattq2002:dat45022@shopcard.9c8qc.mongodb.net/?retryWrites=true&w=majority`
 
@@ -22,12 +24,15 @@ class DatabaseService {
     }
   }
 
-  // get users(): Collection<User> {
-  //   return this.db.collection(process.env.DB_USERS_COLLECTION as string)
-  // }
-  // get refreshTokens(): Collection<RefreshToken> {
-  //   return this.db.collection(process.env.DB_REFRESH_TOKENS_COLLECTION as string)
-  // }
+  get users(): Collection<User> {
+    return this.db.collection('User')
+  }
+  get refreshTokens(): Collection<RefreshToken> {
+    return this.db.collection('RefreshToken')
+  }
+  get messages(): Collection<Message> {
+    return this.db.collection('Message')
+  }
 }
 const databaseService = new DatabaseService()
 export default databaseService

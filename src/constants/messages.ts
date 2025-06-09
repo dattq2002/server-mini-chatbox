@@ -1,4 +1,7 @@
 export const USERS_MESSAGES = {
+  USERNAME_IS_ALREADY_TAKEN: 'Username is already taken',
+  USERNAME_IS_REQUIRED: 'Username is required',
+  USERNAME_MUST_BE_A_STRING: 'Username must be a string',
   REGISTER_SUCCESS: 'Register success',
   VALIDATION_ERROR: 'Validation error',
   EMAIL_IS_REQUIRED: 'Email is required',
