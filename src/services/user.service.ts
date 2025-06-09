@@ -23,7 +23,15 @@ class UserService {
   }
   async getAllChattingUsers(senderId: string, receiverId: string) {
     const roomId = [senderId, receiverId].sort().join('_')
-    const messages = await databaseService.messages.find({ senderId, receiverId }).toArray()
+    const messages = await databaseService.messages
+      .find({
+        $or: [
+          { senderId, receiverId },
+          { senderId: receiverId, receiverId: senderId }
+        ]
+      })
+      .sort({ timestamp: 1 })
+      .toArray()
     if (!messages || messages.length === 0) {
       throw new Error('No chatting users found')
     }

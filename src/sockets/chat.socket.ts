@@ -51,8 +51,8 @@ export const setupSocket = (io: Server) => {
         const message = await databaseService.messages.insertOne({
           senderId: senderId,
           receiverId: receiverId,
-          content: content
-          // timestamp: new Date(timestamp)
+          content: content,
+          createdAt: new Date(timestamp)
         })
 
         // Tạo object tin nhắn để gửi
