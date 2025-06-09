@@ -51,6 +51,6 @@ export const getAllUsersController = async (req: Request, res: Response) => {
   return void res.json({
     status: res.statusCode,
     message: USERS_MESSAGES.GET_ALL_USERS_SUCCESS,
-    data: result
+    user: result
   })
 }

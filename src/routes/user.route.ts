@@ -11,11 +11,11 @@ import { wrapAsync } from '~/utils/handlers'
 
 const userRouter = Router()
 
-userRouter.post('/chatting/all', accessTokenValidator, FindChatMiddleware, wrapAsync(GetAllChattingUsersController))
+userRouter.post('/chatting/all', FindChatMiddleware, wrapAsync(GetAllChattingUsersController))
 
-userRouter.get('/:username', accessTokenValidator, wrapAsync(GetUserByUserNameController))
+userRouter.get('/:username', wrapAsync(GetUserByUserNameController))
 
-userRouter.post('/chatting', accessTokenValidator, ChatMiddleware, wrapAsync(ChattingUserController))
+userRouter.post('/chatting', ChatMiddleware, wrapAsync(ChattingUserController))
 
 userRouter.get('/', getAllUsersController)
 

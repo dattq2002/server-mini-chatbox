@@ -51,6 +51,7 @@ class AuthService {
     if (rep.insertedId) {
       return {
         user_id: rep.insertedId.toString(),
+        name: username,
         access_token,
         refresh_token
       }
@@ -81,6 +82,7 @@ class AuthService {
 
     return {
       user_id: user._id.toString(),
+      name: user.username,
       access_token,
       refresh_token
     }
