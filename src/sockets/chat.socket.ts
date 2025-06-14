@@ -11,11 +11,15 @@ interface MessageData {
 
 export const setupSocket = (io: Server) => {
   console.log('📡 Socket.IO đang khởi tạo...')
-
+  const onlineUsers = new Map()
   io.on('connection', (socket: Socket) => {
     console.log('🔌 Client connected: ' + socket.id)
     console.log('📊 Tổng số kết nối hiện tại:', io.engine.clientsCount)
-
+    const userId = socket.handshake.auth.userId
+    if (userId) {
+      onlineUsers.set(userId, socket.id)
+      io.emit('updateOnlineUsers', Array.from(onlineUsers.keys()))
+    }
     // Khi người dùng join phòng chat
     socket.on('joinRoom', (data: { roomId: string; userId: string }) => {
       try {
@@ -88,6 +92,12 @@ export const setupSocket = (io: Server) => {
 
     // Khi người dùng disconnect
     socket.on('disconnect', () => {
+      onlineUsers.forEach((value, key) => {
+        if (value === socket.id) {
+          onlineUsers.delete(key)
+        }
+      })
+      io.emit('updateOnlineUsers', Array.from(onlineUsers.keys()))
       console.log('❌ Client disconnected: ' + socket.id)
       console.log('📊 Số kết nối còn lại:', io.engine.clientsCount)
     })
