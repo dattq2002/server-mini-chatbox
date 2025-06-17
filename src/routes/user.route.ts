@@ -3,11 +3,13 @@ import {
   ChattingUserController,
   GetAllChattingUsersController,
   getAllUsersController,
-  GetUserByUserNameController
+  GetUserByUserNameController,
+  uploadVoiceController
 } from '~/controllers/user.controller'
 import { accessTokenValidator } from '~/middlewares/auth.middleware'
 import { ChatMiddleware, FindChatMiddleware } from '~/middlewares/user.middleware'
 import { wrapAsync } from '~/utils/handlers'
+import { upload } from '~/utils/upload'
 
 const userRouter = Router()
 
@@ -18,5 +20,7 @@ userRouter.get('/:username', wrapAsync(GetUserByUserNameController))
 userRouter.post('/chatting', ChatMiddleware, wrapAsync(ChattingUserController))
 
 userRouter.get('/', getAllUsersController)
+
+userRouter.post('/uploadVoice', upload.single('file'), wrapAsync(uploadVoiceController))
 
 export default userRouter

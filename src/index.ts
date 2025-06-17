@@ -7,6 +7,7 @@ import { defaultErrorHandler } from '~/middlewares/error.middleware'
 import authRouter from '~/routes/auth.route'
 import { setupSocket } from '~/sockets/chat.socket'
 import userRouter from '~/routes/user.route'
+import path from 'path'
 
 const app = express()
 const server = http.createServer(app) // ✅ Tạo HTTP server riêng để dùng cho Socket.IO
@@ -37,8 +38,10 @@ databaseService.connect()
 app.get('/', (req, res) => {
   res.json({ message: 'Welcome to Server Chatbox !' })
 })
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')))
 app.use('/api/auth', authRouter)
 app.use('/api/user', userRouter)
+
 app.use(defaultErrorHandler)
 
 // ✅ Khởi tạo socket

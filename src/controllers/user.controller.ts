@@ -54,3 +54,15 @@ export const getAllUsersController = async (req: Request, res: Response) => {
     user: result
   })
 }
+
+export const uploadVoiceController = (req: Request, res: Response) => {
+  if (!req.file) {
+    return void res.status(400).json({ message: 'Không có file được tải lên' })
+  }
+
+  const filePath = `/uploads/audio/${req.file.filename}`
+  return void res.status(200).json({
+    message: 'Upload thành công',
+    audioUrl: filePath
+  })
+}
